@@ -3,6 +3,16 @@
 #include <DHT.h>
 #include <DHT_U.h>
 
+#define BLYNK_TEMPLATE_ID "TMPL5JGFzrwLt"
+#define BLYNK_TEMPLATE_NAME "KaiTonio"
+#define BLYNK_AUTH_TOKEN "TAI0PM-202o82qsiu8_mEs9GtECx-N2U"
+
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
+
+#define BLYNK_PRINT Serial
+
 // Define the pins that we will use
 #define SENSOR 33
 #define LED 26
