@@ -13,32 +13,37 @@
 
 #define BLYNK_PRINT Serial
 
-// Define the pins that we will use
 #define SENSOR 33
 #define LED 26
 #define DHTTYPE DHT11
 
 DHT_Unified dht(SENSOR, DHTTYPE);
 
-// WiFi credentials go here
-// ...
-// ...
-// ...
+char ssid[] = "HelloWorld";
+char pass[] = "testtest";
+
+
+BLYNK_WRITE(V2)
+{
+  int pinValue = param.asInt(); 
+  Serial.print("Received value from Blynk: ");
+  Serial.println(pinValue);
+  digitalWrite(LED,pinValue);
+    delay(1000);
+}
 
 void setup() {
   // Setup pins
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
-
+ 
   // Begin serial communication
   Serial.begin(9600);
   delay(100);
-
-  // begin the Blynk session
-  // ...
-  // ...
-  // ...
-
+  Serial.println("Connecting to WiFi...");
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+  Blynk.run();
+  Blynk.syncVirtual(V2);
   // Start listening to the DHT11
   dht.begin();
 
@@ -56,7 +61,6 @@ void setup() {
     temp_measure = event.temperature;
   }
 
-  // Get humidity event and print its value.
   float relative_humidity_measure = -999.0;
   dht.humidity().getEvent(&event);
   if (isnan(event.relative_humidity)) {
@@ -69,9 +73,14 @@ void setup() {
   }
 
   // Send data to Blynk
-  // ...
-  // ...
-  // ...
+  Blynk.virtualWrite(V0, relative_humidity_measure);  //temperature
+ Blynk.virtualWrite(V1,temp_measure);//humidité
+
+
+ 
+  
+
+
 
   Serial.println("Going to sleep for 5 seconds...");
   delay(100);
@@ -79,5 +88,4 @@ void setup() {
 }
 
 void loop() {
-  // Not needed anymore, the function is kept so PlatformIO does not complain.
 }
